@@ -269,6 +269,9 @@ def elimination(xgr1, xgr2):
     tra = None
     xgrs1 = _connected_components(xgr1)
     xgrs2 = _connected_components(xgr2)
+    print('xgrs1 test', xgrs1)
+    print('xgrs2 test', xgrs2)
+    print('length test:', len(xgrs1), len(xgrs2))
     tras = []
     if len(xgrs1) == 1 and len(xgrs2) == 2:
         atms = automol.graph.atoms(xgr1)
@@ -276,6 +279,11 @@ def elimination(xgr1, xgr2):
         bnds = automol.graph.bond_keys(xgr1)
         radicals = _resonance_dominant_radical_atom_keys(xgr1)
         lonepairs = automol.graph.atom_lone_pair_counts(xgr1)
+        print('radicals:', radicals)
+        print('lonepairs:', lonepairs)
+        print('atms:', atms)
+        print('neighs:', neighs)
+        print('bnds:', bnds)
         for atmi in atms:
             i_neighs = neighs[atmi]
             for atmj in i_neighs:
@@ -315,6 +323,8 @@ def elimination(xgr1, xgr2):
                                             tras.append([[bnd_form_key_km], [bnd_break_key_ij, bnd_break_key_lm]])
         for atmi in atms:
             i_neighs = neighs[atmi]
+            print('atmi test:', atmi)
+            print('i_neighs test:', i_neighs)
             for atmj in i_neighs:
                 bnd_break_key_ij = _get_bnd_key(atmi, atmj, bnds)
                 new_xgr = automol.graph.remove_bonds(xgr1, [bnd_break_key_ij])
@@ -328,8 +338,15 @@ def elimination(xgr1, xgr2):
                     neighsA = automol.graph.atom_neighbor_keys(xgrA)
                     atmsB = automol.graph.atoms(xgrB)
                     neighs_i = neighsA[atmi]
+                    print('len atmsB test:', len(atmsB))
                     for atmk in atmsB:
-                        if lonepairs[atmk] > 0:
+                        if lonepairs[atmk] > 0 or len(atmsB) == 1:
+                        # if lonepairs[atmk] > 0:
+                            print('xgrA test:', xgrA)
+                            print('xgrB test:', xgrB)
+                            print('atmk in lonepairs:', atmk)
+                            print('neighs_i:', neighs_i)
+                            print('atmj:', atmj)
                             for atml in neighs_i:
                                 neighs_l = neighsA[atml]
                                 if atml != atmj:
